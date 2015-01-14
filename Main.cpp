@@ -7,6 +7,7 @@ void foo(int * mocha, int max)
 {
 	int toAdd = 2;
 	while(*mocha < max)// These two while loops are not executing in parallel.  Why Not?
+	//					Perhaps the debugger is serializing the execution.  To test this, execute the loops with a large maximum with and without debugging and compare the running time.
 	{
 		*mocha += toAdd;
 	}
