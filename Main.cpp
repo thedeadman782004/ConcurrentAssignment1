@@ -1,48 +1,57 @@
 #include <iostream>
 #include <thread>
+//#include <ctime>
+//#include <sys/time.h>
 
 using namespace std;
+//typedef unsigned long long timestamp_t;
 
-void foo(int * mocha, int max)
+void foo(size_t * mocha, size_t max)
 {
-	int toAdd = 2;
-	while(*mocha < max)// These two while loops are not executing in parallel.  Why Not?
-	//					Perhaps the debugger is serializing the execution.  To test this, execute the loops with a large maximum with and without debugging and compare the running time.
-	{
-		*mocha += toAdd;
-	}
-	//*mocha += 5; // This adds 5 to the value mocha points to
-}
-
-void bar(int * mocha, int max)
-{
-	int toAdd = 2;
+	size_t toAdd = 1;
 	while(*mocha < max)
 	{
 		*mocha += toAdd;
 	}
-	//*mocha += 2; // This adds 2 to the value mocha points to
-	//*mocha += 3;
+}
+
+size_t bar(size_t  mocha, size_t max)
+{
+	size_t toAdd = 1;
+	while(mocha < max)
+	{
+		mocha += toAdd;
+	}
+	return mocha;
 }
 
 int main()
 {  // The main function
-	int maximum = 20;
-	int value = 0; // Declare a value to be 0 to add onto in the functions
-	int * chocolate = &value; // Assign the pointer chocolate to point to value in memory
+	size_t maximum = 4000000000;
+	size_t value = 0; // Declare a value to be 0 to add onto in the functions
+	size_t * chocolate = &value; // Assign the pointer chocolate to point to value in memory
+	time_t startTime = time(NULL);
+	time_t endTime;
 
 	thread first(foo, chocolate, maximum);
-	thread second(bar, chocolate, maximum);
-
-	cout << "main, foo and bar now execute concurrently..." << endl;
-
+	thread second(foo, chocolate, maximum);
+	thread third(foo, chocolate, maximum);
 	// synchronize threads:
 	first.join();                // pauses until first finishes
 	second.join();               // pauses until second finishes
+	third.join();
+	endTime = time(NULL) - startTime;
+	cout << "Thread running time: " << endTime << endl;
+	cout << "Chocolate equal to: " << *chocolate << endl;
 
-	cout << "foo and bar completed." << endl;
-	cout << "Chocolate is now equal to: " << *chocolate << endl;
-	//chocolate is equal to 17, 10 + 5 + 2, because each function used a pointer
+	size_t cocoa = 0;
+	startTime = time(NULL);
+
+	cocoa = bar(cocoa, maximum);
+
+	endTime = time(NULL) - startTime;
+	cout << "Sequential time: " << endTime << endl;
+	cout << "Chocolate is now equal to: " << cocoa << endl;
 
 	return 0;
 }
