@@ -68,6 +68,11 @@ int main()
 	// Add up the number of threes
 	int arrayTwo_arr[array_size_cint / 2]; // Right here the might be a problem if the array has an odd number of indices
 	for (int i = 0; i < max_threads_cint; ++i)
+
+		/* Above Works
+		Below Does not Work Yet*/
+
+
 	{ // addition_threads creates i threads, which is the maximum number of threads allowed
 		// _addThrees needs to be passed index locations from arrayOfThrees_arr from 0 to arrayOfThrees_arr.length / 2
 		addition_threads[i] = std::thread(_addThrees, (2 * i) + 1, arrayOfThrees_arr, arrayTwo_arr);
