@@ -23,15 +23,15 @@ void _addThrees(int i, int * arrayOne, int * arrayTwo, int size_array_two_cint)
 	// from arrayOne added together. i.e., arrayTwo[0] contains arrayOne[0] + 
 	// arrayOne[1]
 	std::cout << "Thread " << i << std::endl;
-	if (arrayOne[i - 1] == 0 && arrayOne[i] == 0)
+	/*if (arrayOne[i - 1] == 0 && arrayOne[i] == 0)
 	{
 		return;
 	}
 	else if (size_array_two_cint == 1)
 	{
 		std::cout << "There are " << arrayOne[0] << " threes in the array." << std::endl;
-	}
-	arrayTwo[i / 1] = arrayOne[i - 1] + arrayOne[i];
+	}*/
+	arrayTwo[i / 2] = arrayOne[i - 1] + arrayOne[i];
 	return; 
 }
 
@@ -60,7 +60,7 @@ int main()
 	// Variable declaration
 	const int generator_max_cint = 4;
 	const int generator_min_cint = 2;
-	const int half_of_array = 3; // This will determine the size of the array, twice this number
+	const int half_of_array = 10; // Twice this number will be the size of the array
 	const int array_size_cint = 2 * half_of_array;
 	const int find_this_cint = 3;
 	const int max_threads_cint = array_size_cint / 2;
@@ -78,7 +78,7 @@ int main()
 	_checkThree(arrayOfThrees_arr, array_size_cint, find_this_cint);
 	std::thread addition_threads[max_threads_cint];
 	// Add up the number of threes
-	int arrayTwo_arr[half_of_array] = { 0 }; // Right here the might be a problem if the array has an odd number of indices
+	int arrayTwo_arr[half_of_array] = {0};
 	for (int i = 0; i < max_threads_cint; ++i)
 	{
 		addition_threads[i] = std::thread(_addThrees, (2 * i) + 1, arrayOfThrees_arr, arrayTwo_arr, half_of_array);
