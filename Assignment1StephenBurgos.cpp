@@ -10,18 +10,29 @@
  * Statement: I wrote all of this code myself and did not copy any
 		code from the internet or another student.
 */
-#include <iostream> ;
-#include <thread>;
-#include <random>;
+#include <iostream>
+#include <thread>
+#include <random>
+#include <array>
 
-int _addThrees(int i, int * arrayOne, int * arrayTwo)
+void _addThrees(int i, int * arrayOne, int * arrayTwo, int size_array_two_cint)
 {
 	// Pre-condition: arrayOne contains integers that will be added together, 
 	// two at a time, and placed into arrayTwo
 	// Post-condition: The indicis in arrayTwo each contain two of the indices 
 	// from arrayOne added together. i.e., arrayTwo[0] contains arrayOne[0] + 
 	// arrayOne[1]
-	return 0; // Should return the size of arrayTwo
+	std::cout << "Thread " << i << std::endl;
+	if (arrayOne[i - 1] == 0 && arrayOne[i] == 0)
+	{
+		return;
+	}
+	else if (size_array_two_cint == 1)
+	{
+		std::cout << "There are " << arrayOne[0] << " threes in the array." << std::endl;
+	}
+	arrayTwo[i / 1] = arrayOne[i - 1] + arrayOne[i];
+	return; 
 }
 
 void _checkThree(int * arrayCheck_arr, const int size_cint, const int find_value_cint)
@@ -49,9 +60,10 @@ int main()
 	// Variable declaration
 	const int generator_max_cint = 4;
 	const int generator_min_cint = 2;
-	const int array_size_cint = 20;
+	const int half_of_array = 3; // This will determine the size of the array, twice this number
+	const int array_size_cint = 2 * half_of_array;
 	const int find_this_cint = 3;
-	const int max_threads_cint = 10;
+	const int max_threads_cint = array_size_cint / 2;
 	int arrayOfThrees_arr[array_size_cint];
 	// Create an array of random numbers
 	std::random_device randomDevice;
@@ -66,20 +78,27 @@ int main()
 	_checkThree(arrayOfThrees_arr, array_size_cint, find_this_cint);
 	std::thread addition_threads[max_threads_cint];
 	// Add up the number of threes
-	int arrayTwo_arr[array_size_cint / 2]; // Right here the might be a problem if the array has an odd number of indices
+	int arrayTwo_arr[half_of_array] = { 0 }; // Right here the might be a problem if the array has an odd number of indices
 	for (int i = 0; i < max_threads_cint; ++i)
-
-		/* Above Works
-		Below Does not Work Yet*/
-
-
-	{ // addition_threads creates i threads, which is the maximum number of threads allowed
-		// _addThrees needs to be passed index locations from arrayOfThrees_arr from 0 to arrayOfThrees_arr.length / 2
-		addition_threads[i] = std::thread(_addThrees, (2 * i) + 1, arrayOfThrees_arr, arrayTwo_arr);
+	{
+		addition_threads[i] = std::thread(_addThrees, (2 * i) + 1, arrayOfThrees_arr, arrayTwo_arr, half_of_array);
 	}
 	for (int i = 0; i < max_threads_cint; ++i)
 	{
 		addition_threads[i].join();
 	}
+	//DEBUGGING:
+	std::cout << "Array of threes: " << std::endl;
+	for (int i = 0; i < array_size_cint; ++i)
+	{
+		std::cout << arrayOfThrees_arr[i];
+	}
+	std::cout << std::endl;
+	std::cout << "Array Two: " << std::endl;
+	for (int i = 0; i < half_of_array; ++i)
+	{
+		std::cout << arrayTwo_arr[i];
+	}
+	std::cout << std::endl;
 	return 0;
 }
