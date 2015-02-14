@@ -1,6 +1,8 @@
 #include <iostream>
 #include <pthread.h>
-//using namespace std;
+
+// NOTE: This seems to be running sequentially, or something because the "Threading "
+// prints out in order rather than in a random order. 
 
 #if defined(__cplusplus)
 extern "C"
@@ -8,14 +10,21 @@ extern "C"
 
 void *print_message(void*)
 {
-    std::cout << "Threading\n";
+	for(int index = 0; index < 5; ++index)
+	{
+		std::cout << "Threading " << index << std::endl;
+	}
 	return NULL;
 }
 
 int main() 
 {
 	int threads = 5;
-    pthread_t t1[threads];
+	pthread_t t1[threads];
+	for(int index = 0; index < threads; ++index)
+	{
+		t1[index] = index;
+	}
 	
 	for(int index = 0; index < threads; ++index)
 	{
