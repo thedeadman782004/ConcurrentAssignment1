@@ -61,6 +61,7 @@ int main()
 	CINT max_threads_cint = array_size_cint / 2;
 	int space_used_int = half_of_array_cint; // Tracks the space of each array being used
 	int arrayOfThrees_arr[array_size_cint];
+	
 	// Generate an array of array_size_cint random numbers in the range generator_min_cint to generator_max_cint
 	std::random_device randomDevice;
 	std::mt19937_64 numberGenerated_int(randomDevice());
@@ -69,6 +70,7 @@ int main()
 	{
 		arrayOfThrees_arr[index] = distr(numberGenerated_int);
 	}	
+	
 	// Print the array for to check visually
 	std::cout << "Initial array: " << std::endl;
 	for (int i = 0; i < array_size_cint; ++i)
@@ -76,9 +78,11 @@ int main()
 		std::cout << arrayOfThrees_arr[i]; 
 	}
 	std::cout << std::endl;
+	
 	// Convert the array for counting
 	_checkThree(arrayOfThrees_arr, array_size_cint, find_this_cint);
 	std::thread addition_threads[max_threads_cint];
+	
 	// Add up the number of threes (or other value of find_this_cint)
 	int arrayTwo_arr[half_of_array_cint] = { 0 };
 	while (space_used_int > 0) // If space_used_int is 0, then the final answer has been found
@@ -91,22 +95,26 @@ int main()
 		{
 			addition_threads[i].join();
 		}
+		
 		// Don't lose the last number of an odd length array
 		if (space_used_int != 1 && space_used_int % 2 != 0)
 		{
 			arrayTwo_arr[space_used_int - 2] += arrayTwo_arr[space_used_int - 1]; 
 			arrayTwo_arr[space_used_int - 1] = 0;
 		}
+		
 		// Copy the elements back to arrayOfThrees_arr to be summed again
 		for (int i = 0; i < space_used_int; ++i)
 		{
 			arrayOfThrees_arr[i] = arrayTwo_arr[i]; 
 		}
+		
 		// Set all other values in arrayOne_arr to 0
 		for (int i = space_used_int; i < space_used_int * 2; ++i)
 		{
 			arrayOfThrees_arr[i] = 0; 
 		}
+		
 		// Reset arrayTwo_arr
 		for (int i = 0; i < space_used_int; ++i)
 		{
